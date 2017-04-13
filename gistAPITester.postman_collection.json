@@ -113,7 +113,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					}
 				],
@@ -130,19 +130,16 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"// See body tab for actual contents sent.",
+							"// See body tab for json formatted contents sent.",
 							"",
 							"var jsonData = JSON.parse(responseBody);",
 							"",
 							"// Get current Gist ID following Rufian55 gist create call.",
 							"var retID = jsonData.id;",
 							"",
-							"postman.clearEnvironmentVariable(\"gist\");",
-							"",
 							"postman.setEnvironmentVariable(\"gistID\", retID);",
 							"",
 							"tests[\"Successful POST request\"] = responseCode.code === 201 || responseCode.code === 202;",
-							"",
 							""
 						]
 					}
@@ -154,7 +151,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					},
 					{
@@ -165,7 +162,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"description\": \"A statement concerning Bashir Assad of Syria\",\n  \"public\": true,\n  \"files\": {\n    \"Accused.txt\": {\n      \"content\": \"You used sarin gas to kill innocent civilians!\\nMore than once!\\nYou will answer for your crimes.\"\n    }\n  }\n}"
+					"raw": "{\n  \"description\": \"A statement concerning Bashir Assad of Syria\",\n  \"public\": true,\n  \"files\": {\n    \"Accused.txt\": {\n      \"content\": \"You used sarin gas to kill innocent civilians! More than once! You will answer for your crimes.\"\n    }\n  }\n}"
 				},
 				"description": ""
 			},
@@ -186,12 +183,14 @@
 							"for (var i = 0; i < jsonData.length; i++) {",
 							"    counted++;",
 							"}",
-							"postman.clearEnvironmentVariable(\"count2\");",
 							"",
 							"postman.setEnvironmentVariable(\"count2\", counted);",
 							"",
 							"var temp1 = postman.getEnvironmentVariable(\"count1\");",
+							"",
+							"// Increment the previouos gist (count1) var.",
 							"temp1++;",
+							"",
 							"var temp2 = postman.getEnvironmentVariable(\"count2\");",
 							"",
 							"tests[\"Gist Created, myGists incremented by 1\"] = temp1 == temp2;"
@@ -205,7 +204,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					}
 				],
@@ -226,15 +225,17 @@
 							"var jsonData = JSON.parse(responseBody);",
 							"",
 							"// Test file name match.",
-							"tests[\"JSON \\\"filename\\\" matches string 1\"] = responseBody.has(\"Accused.txt\");",
+							"tests[\"JSON \\\"filename\\\" matches string 1\"] = jsonData.files[postman.getEnvironmentVariable(\"string_01\")].filename == postman.getEnvironmentVariable(\"string_01\");",
 							"",
 							"// Test \"description\" string match.",
-							"tests[\"JSON \\\"description\\\" matches string 2\"] = responseBody.has(\"A statement concerning Bashir Assad of Syria\");",
+							"tests[\"JSON \\\"description\\\" matches string 2\"] = jsonData.description == postman.getEnvironmentVariable(\"string_02\");",
 							"",
-							"// Test \"content\" string match. Note escaped '\\n'.",
-							"tests[\"JSON \\\"content\\\" matches string 3\"] = responseBody.has(\"You used sarin gas to kill innocent civilians!\\\\nMore than once!\\\\nYou will answer for your crimes.\");",
+							"// Test \"content\" string match.",
+							"tests[\"JSON \\\"content\\\" matches string 3\"] = jsonData.files[postman.getEnvironmentVariable(\"string_01\")].content == postman.getEnvironmentVariable(\"string_03\");",
 							"",
 							"tests[\"jsonData.public set to \\\"true\\\"\"] = jsonData.public === true;",
+							"",
+							"//CITATION: http://stackoverflow.com/questions/2577172/how-to-get-json-objects-value-if-its-name-contains-dots",
 							""
 						]
 					}
@@ -246,7 +247,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					}
 				],
@@ -263,18 +264,20 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
+							"// See body tab for json formatted contents sent.",
+							"",
 							"tests[\"testEditGist Status code is 200\"] = responseCode.code === 200;",
 							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
 							"// Test file name match.",
-							"tests[\"JSON \\\"filename\\\" matches string 1\"] = responseBody.has(\"Accused.txt\");",
+							"tests[\"JSON \\\"filename\\\" matches string 1\"] = jsonData.files[postman.getEnvironmentVariable(\"string_01\")].filename == postman.getEnvironmentVariable(\"string_01\");",
 							"",
 							"// Test \"description\" string match.",
-							"tests[\"JSON \\\"description\\\" matches string 2\"] = responseBody.has(\"DJT is Earth's Avenging Angel.\");",
+							"tests[\"JSON \\\"description\\\" matches string 2\"] = jsonData.description == postman.getEnvironmentVariable(\"string_04\");",
 							"",
 							"// Test \"content\" string match. Note escaped '\\n'.",
-							"tests[\"JSON \\\"content\\\" matches string 3\"] = responseBody.has(\"Launch the missiles!\");",
-							"",
-							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"JSON \\\"content\\\" matches string 3\"] = jsonData.files[postman.getEnvironmentVariable(\"string_01\")].content == postman.getEnvironmentVariable(\"string_05\");",
 							"",
 							"tests[\"jsonData.public set to \\\"true\\\"\"] = jsonData.public === true;"
 						]
@@ -287,7 +290,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					},
 					{
@@ -323,7 +326,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					},
 					{
@@ -359,7 +362,9 @@
 							"tests[\"MY starred Gist count == 1\"] = count == 1;",
 							"",
 							"// Returned Gist ID matches Gist created by testCreateGist().",
-							"tests[\"Stared Gist returned contains correct ID string.\"] = responseBody.has(postman.getEnvironmentVariable(\"gistID\"));"
+							"tests[\"Stared Gist returned contains correct ID string.\"] = jsonData[0].id == postman.getEnvironmentVariable(\"gistID\");",
+							"",
+							""
 						]
 					}
 				}
@@ -370,7 +375,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					}
 				],
@@ -398,7 +403,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					}
 				],
@@ -426,7 +431,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer 51304fc0a53bd907e1ecfc9a083738ac6eae5f0e",
+						"value": "Bearer = a 40 char alphanumeric string",
 						"description": ""
 					}
 				],
